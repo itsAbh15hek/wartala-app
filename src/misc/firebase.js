@@ -1,13 +1,12 @@
-/* eslint-disable no-unused-vars */
-// Import the functions you need from the SDKs you need
-import firebase from 'firebase/app';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/database';
 
-// Your web app's Firebase configuration
 const config = {
   apiKey: 'AIzaSyB10HpW5DDzzm9k9Btjm1oB7ufGwbAJ1bs',
   authDomain: 'wartala-app.firebaseapp.com',
+  databaseURL:
+    'https://wartala-app-default-rtdb.asia-southeast1.firebasedatabase.app/',
   projectId: 'wartala-app',
   storageBucket: 'wartala-app.appspot.com',
   messagingSenderId: '4598573577',
@@ -16,3 +15,5 @@ const config = {
 
 // Initialize Firebase
 const app = firebase.initializeApp(config);
+export const auth = app.auth();
+export const database = app.database();
