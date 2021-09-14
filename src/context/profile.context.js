@@ -1,5 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import firebase from 'firebase/compat/app';
 import { auth, database } from '../misc/firebase';
+
+export const isOfflineForDatabase = {
+  state: 'offline',
+  last_changed: firebase.database.ServerValue.TIMESTAMP,
+};
+
+const isOnlineForDatabase = {
+  state: 'online',
+  last_changed: firebase.database.ServerValue.TIMESTAMP,
+};
 
 const ProfileContext = createContext();
 export const ProfilePrvider = ({ children }) => {
@@ -8,14 +19,16 @@ export const ProfilePrvider = ({ children }) => {
 
   useEffect(() => {
     let userRef;
+    let userStatusRef;
     const authUnSub = auth.onAuthStateChanged(authObj => {
       if (authObj) {
+        userStatusRef = database.ref(`/status/${authObj.uid}`);
         userRef = database.ref(`/profiles/${authObj.uid}`);
         userRef.on('value', snap => {
-          const { name, creatdAt, avatar } = snap.val();
+          const { name, createdAt, avatar } = snap.val();
           const data = {
             name,
-            creatdAt,
+            createdAt,
             avatar,
             uid: authObj.uid,
             email: authObj.email,
@@ -23,8 +36,24 @@ export const ProfilePrvider = ({ children }) => {
           setProfile(data);
           setIsLoading(false);
         });
+
+        database.ref('.info/connected').on('value', snapshot => {
+          if (snapshot.val() === false) {
+            return;
+          }
+
+          userStatusRef
+            .onDisconnect()
+            .set(isOfflineForDatabase)
+            .then(() => {
+              userStatusRef.set(isOnlineForDatabase);
+            });
+        });
       } else {
-        userRef.off();
+        if (userRef) userRef.off();
+
+        if (userStatusRef) userStatusRef.off();
+
         setProfile(null);
         setIsLoading(false);
       }
@@ -32,6 +61,7 @@ export const ProfilePrvider = ({ children }) => {
     return () => {
       authUnSub();
       if (userRef) userRef.off();
+      if (userStatusRef) userStatusRef.off();
     };
   }, []);
 
