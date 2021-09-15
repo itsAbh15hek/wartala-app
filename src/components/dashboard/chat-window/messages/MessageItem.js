@@ -36,8 +36,8 @@ const MessageItem = ({ message, handleAdmin }) => {
           {canGrantAdmin && (
             <Button block onClick={() => handleAdmin(author.uid)} color="blue">
               {isMessageAuthorAdmin
-                ? 'Remove Admin permissions'
-                : 'Grant Admin permissions'}
+                ? 'Remove Admin privilages'
+                : 'Grant Admin privilages'}
             </Button>
           )}
         </ProfileInfoBtnModal>
