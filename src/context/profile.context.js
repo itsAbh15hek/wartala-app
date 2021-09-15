@@ -38,7 +38,7 @@ export const ProfilePrvider = ({ children }) => {
         });
 
         database.ref('.info/connected').on('value', snapshot => {
-          if (snapshot.val() === false) {
+          if (!!snapshot.val() === false) {
             return;
           }
 
@@ -53,13 +53,14 @@ export const ProfilePrvider = ({ children }) => {
         if (userRef) userRef.off();
 
         if (userStatusRef) userStatusRef.off();
-
+        database.ref('.info/connected').off();
         setProfile(null);
         setIsLoading(false);
       }
     });
     return () => {
       authUnSub();
+      database.ref('.info/connected').off();
       if (userRef) userRef.off();
       if (userStatusRef) userStatusRef.off();
     };

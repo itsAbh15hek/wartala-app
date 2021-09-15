@@ -4,7 +4,7 @@ import { useProfile } from '../../context/profile.context';
 import { database } from '../../misc/firebase';
 import { getUserUpdates } from '../../misc/helpers';
 import AvatarUploadBtn from './AvatarUploadBtn';
-import EditableInput from './EditableInput';
+import EditableInput from '../EditableInput';
 import ProviderBlock from './ProviderBlock';
 
 const Dashboard = ({ onSignOut }) => {
