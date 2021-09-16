@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Alert } from 'rsuite';
@@ -95,7 +96,7 @@ const Messages = () => {
         await database.ref().update(update);
         Alert.info('Message Deleted');
       } catch (err) {
-        Alert.error(err.message);
+        return Alert.error(err.message, 4000);
       }
 
       if (file) {
@@ -103,7 +104,7 @@ const Messages = () => {
           const fileRef = storage.refFromURL(file.url);
           await fileRef.delete();
         } catch (err) {
-          Alert.error(err.message, 100000);
+          Alert.error(err.message, 4000);
         }
       }
     },

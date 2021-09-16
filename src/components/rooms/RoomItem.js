@@ -28,7 +28,12 @@ const RoomItem = ({ room }) => {
               </div>
               <div className="text-disappear ml-2">
                 <div className="italic">{lastMessage.author.name}</div>
-                <span>{lastMessage.text}</span>
+                <span>
+                  {lastMessage.text ||
+                    `${lastMessage.file.contentType
+                      .slice(lastMessage.file.contentType.indexOf('/') + 1)
+                      .toUpperCase()} File`}
+                </span>
               </div>
             </>
           ) : (
